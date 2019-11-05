@@ -14,4 +14,6 @@ RUN yum install -y yum-axelget wget; \
     yum --enablerepo=elrepo-kernel install -y kernel-lt; \
     grub2-set-default 'CentOS Linux (4.4.189-1.el7.elrepo.x86_64) 7 (Core)'
 
+RUN echo "k8s-cluster" | passwd --stdin root
+
 CMD /bin/bash
