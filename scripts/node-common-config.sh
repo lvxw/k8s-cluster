@@ -3,8 +3,9 @@
 function setEnv(){
     cd `cd $(dirname $0) && pwd`
     base_dir=`pwd`
-    nodeCount=$1
+    hostName=$1
     ipPrefix=$2
+    nodeCount=$3
     source /etc/profile
 }
 
@@ -13,18 +14,18 @@ function addHosts(){
     do
         if [[ ${x} -eq 1 ]]
         then
-            hostName=k8s-master01
+            tmpHostName=k8s-master01
             ip=${ipPrefix}.02
         else
-            hostName=k8s-node0$(($x-1))
+            tmpHostName=k8s-node0$(($x-1))
             ip=${ipPrefix}.$(($x+1))
         fi
-        echo "${ip} ${hostName}" >> /etc/hosts;
+        echo "${ip} ${tmpHostName}" >> /etc/hosts;
     done
 }
 
 function commonConfigure(){
-    hostnamectl  set-hostname  k8s-master01
+    hostnamectl  set-hostname  ${hostName}
     systemctl  stop firewalld  &&  systemctl  disable firewalld
     systemctl  start iptables  &&  systemctl  enable iptables  &&  iptables -F  &&  service iptables save
     swapoff -a && sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab

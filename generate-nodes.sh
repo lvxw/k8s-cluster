@@ -91,7 +91,7 @@ function configNodes(){
                 hostName=k8s-node0$(($x-1))
             fi
             sleep 10s
-            docker exec -it ${hostName} scripts/node-common-config.sh ${nodeCount}
+            docker exec -it ${hostName} scripts/node-common-config.sh ${hostName} ${ipPrefix} ${nodeCount}
         done
 
         for x in `seq 1 ${nodeCount}`
