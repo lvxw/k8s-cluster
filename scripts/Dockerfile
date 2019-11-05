@@ -8,24 +8,24 @@ RUN yum install -y yum-axelget wget; \
     wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.163.com/.help/CentOS7-Base-163.repo; \
     yum clean all; \
     yum makecache; \
-    yum install -y which sshpass net-tools openssh* rsync conntrack ntpdate ntp ipvsadm ipset jq iptables curl sysstat libseccomp  vim  net-tools git firewalld iptables-services grub2 rsyslog yum-utils device-mapper-persistent-data lvm2 docker-ce; \
+    yum install -y which sshpass net-tools openssh* rsync conntrack ntpdate ntp ipvsadm ipset jq iptables curl sysstat libseccomp  vim  net-tools git firewalld iptables-services grub2 rsyslog yum-utils device-mapper-persistent-data lvm2
 
 RUN yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo; \
     yum update -y; \
     yum install -y docker-ce; \
     mkdir -p /etc/docker /etc/systemd/system/docker.service.d
 
-RUN cat > /etc/docker/daemon.json <<EOF \
-{ \
-    "exec-opts": ["native.cgroupdriver=systemd"], \
-    "log-driver": "json-file", \
-    "log-opts": { \
-    "max-size": "100m" \
-    } \
-}\
-EOF
+RUN echo '{' > /etc/docker/daemon.json
+    echo '    "exec-opts": ["native.cgroupdriver=systemd"],' >> /etc/docker/daemon.json
+    echo '    "log-driver": "json-file",' >> /etc/docker/daemon.json
+    echo '    "log-opts": {' >> /etc/docker/daemon.json
+    echo '    "max-size": "100m"' >> /etc/docker/daemon.json
+    echo '    }' >> /etc/docker/daemon.json
+    echo '}' >> /etc/docker/daemon.json
 
-RUN systemctl daemon-reload && systemctl restart docker && systemctl enable docker
+RUN systemctl daemon-reload; \
+    systemctl restart docker; \
+    systemctl enable docker
 
 RUN rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm; \
     yum --enablerepo=elrepo-kernel install -y kernel-lt; \

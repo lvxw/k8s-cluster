@@ -78,6 +78,21 @@ EOF
 }
 
 function installK8sCluster(){
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=0
+repo_gpgcheck=0
+gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+
+    yum -y  install  kubeadm-1.15.1 kubectl-1.15.1 kubelet-1.15.1
+    systemctl enable kubelet.service
+
+
     cd ${baseDir}/files
 
     if [[ ! -e ${baseDir}/files/kubeadm-basic.images ]]
@@ -87,8 +102,10 @@ function installK8sCluster(){
 
     for x in `ls -l ${baseDir}/files/kubeadm-basic.images`
     do
-        echo ${baseDir}/files/kubeadm-basic.images/${x}
+        docker load -i ${baseDir}/files/kubeadm-basic.images/${x}
     done
+
+#    kubeadm init --config=${baseDir}/scripts/kubeadm/kubeadm-config.yaml --experimental-upload-certs | tee kubeadm-init.log
 
 }
 
