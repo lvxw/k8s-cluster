@@ -53,7 +53,7 @@ function createNodes(){
             if [[ ${x} -eq 1 ]]
             then
                 hostName=k8s-master01
-                ip=${ipPrefix}.02
+                ip=${ipPrefix}.2
             else
                 hostName=k8s-node0$(($x-1))
                 ip=${ipPrefix}.$(($x+1))
@@ -79,7 +79,7 @@ function configNodes(){
             docker start ${hostName}
             docker exec -it ${hostName} systemctl start sshd
             sleep 10s
-            sshpass -p cluster ssh-copy-id -i ~/.ssh/id_rsa.pub root@${hostName} -o StrictHostKeyChecking=no
+            sshpass -p k8s-cluster ssh-copy-id -i ~/.ssh/id_rsa.pub root@${hostName} -o StrictHostKeyChecking=no
         done
 
         for x in `seq 1 ${nodeCount}`
