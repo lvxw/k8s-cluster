@@ -2,7 +2,6 @@
 
 function setEnv(){
     cd `cd $(dirname $0) && pwd`
-    base_dir=`pwd`
     hostName=$1
     ipPrefix=$2
     nodeCount=$3
@@ -78,6 +77,22 @@ EOF
     systemctl restart systemd-journald
 }
 
+function installK8sCluster(){
+    cd ${baseDir}/files
+
+    if [[ ! -e ${baseDir}/files/kubeadm-basic.images ]]
+    then
+        tar zxvf  ${baseDir}/files/kubeadm-basic.images.tar.gz
+    fi
+
+    for x in `ls -l ${baseDir}/files/kubeadm-basic.images`
+    do
+        echo ${baseDir}/files/kubeadm-basic.images/${x}
+    done
+
+}
+
 setEnv $*
 addHosts
 commonConfigure
+installK8sCluster
