@@ -77,7 +77,7 @@ function configNodes(){
                 hostName=k8s-node0$(($x-1))
             fi
             docker start ${hostName}
-            docker exec -it hostnamectl set-hostname ${hostName}
+            docker exec -it ${hostName} hostnamectl set-hostname ${hostName}
             docker exec -it ${hostName} systemctl start sshd
             sleep 10s
             sshpass -p cluster ssh-copy-id -i ~/.ssh/id_rsa.pub root@${hostName} -o StrictHostKeyChecking=no
