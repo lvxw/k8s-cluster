@@ -24,6 +24,20 @@ function addHosts(){
 }
 
 function commonConfigure(){
+cat > /etc/docker/daemon.json <<EOF
+{
+    "exec-opts": ["native.cgroupdriver=systemd"],
+    "log-driver": "json-file",
+    "log-opts": {
+    "max-size": "100m"
+    }
+}
+EOF
+
+    systemctl daemon-reload
+    systemctl restart docker
+    systemctl enable docker
+
     hostnamectl  set-hostname  ${hostName}
     systemctl  stop firewalld  &&  systemctl  disable firewalld
     systemctl  start iptables  &&  systemctl  enable iptables  &&  iptables -F  &&  service iptables save
@@ -78,7 +92,7 @@ EOF
 }
 
 function installK8sCluster(){
-cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+cat > /etc/yum.repos.d/kubernetes.repo <<EOF
 [kubernetes]
 name=Kubernetes
 baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
