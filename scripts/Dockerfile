@@ -15,12 +15,12 @@ RUN yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/cent
     yum install -y docker-ce; \
     mkdir -p /etc/docker /etc/systemd/system/docker.service.d
 
-RUN echo '{' > /etc/docker/daemon.json
-    echo '    "exec-opts": ["native.cgroupdriver=systemd"],' >> /etc/docker/daemon.json
-    echo '    "log-driver": "json-file",' >> /etc/docker/daemon.json
-    echo '    "log-opts": {' >> /etc/docker/daemon.json
-    echo '    "max-size": "100m"' >> /etc/docker/daemon.json
-    echo '    }' >> /etc/docker/daemon.json
+RUN echo '{' > /etc/docker/daemon.json; \
+    echo '    "exec-opts": ["native.cgroupdriver=systemd"],' >> /etc/docker/daemon.json; \
+    echo '    "log-driver": "json-file",' >> /etc/docker/daemon.json; \
+    echo '    "log-opts": {' >> /etc/docker/daemon.json; \
+    echo '    "max-size": "100m"' >> /etc/docker/daemon.json; \
+    echo '    }' >> /etc/docker/daemon.json; \
     echo '}' >> /etc/docker/daemon.json
 
 RUN systemctl daemon-reload; \

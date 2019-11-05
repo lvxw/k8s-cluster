@@ -93,16 +93,16 @@ EOF
     systemctl enable kubelet.service
 
 
-    cd ${baseDir}/files
+    cd /usr/local/soft
 
-    if [[ ! -e ${baseDir}/files/kubeadm-basic.images ]]
+    if [[ ! -e /usr/local/soft/kubeadm-basic.images ]]
     then
-        tar zxvf  ${baseDir}/files/kubeadm-basic.images.tar.gz
+        tar zxvf  /usr/local/soft/kubeadm-basic.images.tar.gz
     fi
 
-    for x in `ls -l ${baseDir}/files/kubeadm-basic.images`
+    for x in `ls -l /usr/local/soft/kubeadm-basic.images`
     do
-        docker load -i ${baseDir}/files/kubeadm-basic.images/${x}
+        docker load -i /usr/local/soft/kubeadm-basic.images/${x}
     done
 
 #    kubeadm init --config=${baseDir}/scripts/kubeadm/kubeadm-config.yaml --experimental-upload-certs | tee kubeadm-init.log
