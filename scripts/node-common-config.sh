@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function setEnv(){
-    cd `cd $(dirname $0) && pwd`
+    echo "------------------------setEnv----------------------------"
     hostName=$1
     ipPrefix=$2
     nodeCount=$3
@@ -9,6 +9,7 @@ function setEnv(){
 }
 
 function addHosts(){
+    echo "------------------------addHosts----------------------------"
     for x in `seq 1 ${nodeCount}`
     do
         if [[ ${x} -eq 1 ]]
@@ -19,11 +20,12 @@ function addHosts(){
             tmpHostName=k8s-node0$(($x-1))
             ip=${ipPrefix}.$(($x+1))
         fi
-        echo "${ip} ${tmpHostName}" >> /etc/hosts;
+        echo "${ip}    ${tmpHostName}" >> /etc/hosts;
     done
 }
 
 function commonConfigure(){
+echo "------------------------commonConfigure----------------------------"
 cat > /etc/docker/daemon.json <<EOF
 {
     "exec-opts": ["native.cgroupdriver=systemd"],
@@ -92,15 +94,15 @@ EOF
 }
 
 function installK8sCluster(){
-cat > /etc/yum.repos.d/kubernetes.repo <<EOF
+echo "------------------------installK8sCluster----------------------------"
+cat  > /etc/yum.repos.d/kubernetes.repo <<EOF
 [kubernetes]
 name=Kubernetes
 baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
 enabled=1
 gpgcheck=0
 repo_gpgcheck=0
-gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
-http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
 
     yum -y  install  kubeadm-1.15.1 kubectl-1.15.1 kubelet-1.15.1

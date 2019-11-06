@@ -92,7 +92,7 @@ function configNodes(){
             fi
             sleep 10s
             /usr/local/bin/xcall.sh "mkdir -p /usr/local/soft"
-            /usr/local/bin/xsync.sh "${baseDir}/files/kubeadm-basic.images.tar.gz /usr/local/soft/"
+            /usr/local/bin/xsync.sh "${baseDir}/files/kubeadm-basic.images.tar.gz" "/usr/local/soft/"
             docker exec -it ${hostName} /usr/local/bin//node-common-config.sh ${hostName} ${ipPrefix} ${nodeCount}
         done
 
